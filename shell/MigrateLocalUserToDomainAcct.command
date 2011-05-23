@@ -3,7 +3,10 @@ Version=1.0
 # Modified 2/18/2011
 
 # MigrateLocalUserToDomainAcct.command
-# Jim Rispin
+# Patrick Gallagher
+# Emory College
+
+# Modified by Jim Rispin
 #
 
 # This script should not need any modification in most enviornments. 

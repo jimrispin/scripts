@@ -33,26 +33,26 @@ computerid=`/usr/sbin/scutil --get LocalHostName`
 
 
 # Standard parameters
-domain="DOMAIN.COM"			# fully qualified DNS name of Active Directory Domain
+domain="pasadena.fuller.edu"			# fully qualified DNS name of Active Directory Domain
 #udn="bind_account"			# username of a privileged network user
 #password=""				# password of a privileged network user
-laptop_ou="OU=Macs,OU=Laptops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM"		# Distinguished name of container for the Mac laptops
-desktop_ou="OU=Macs,OU=Desktops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM"	# Distinguished name of container for the Mac desktops
+#laptop_ou="OU=Macs,OU=Laptops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM"		# Distinguished name of container for the Mac laptops
+#desktop_ou="OU=Macs,OU=Desktops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM"	# Distinguished name of container for the Mac desktops
 
 # Advanced options
 alldomains="disable"			# 'enable' or 'disable' automatic multi-domain authentication
 localhome="enable"			# 'enable' or 'disable' force home directory to local drive
 protocol="smb"				# 'afp' or 'smb' change how home is mounted from server
 mobile="enable"			# 'enable' or 'disable' mobile account support for offline logon
-mobileconfirm="enable"		# 'enable' or 'disable' warn the user that a mobile acct will be created
+mobileconfirm="disable"		# 'enable' or 'disable' warn the user that a mobile acct will be created
 useuncpath="disable"			# 'enable' or 'disable' use AD SMBHome attribute to determine the home dir
 user_shell="/bin/bash"		# e.g., /bin/bash or "none"
 preferred="-nopreferred"	# Use the specified server for all Directory lookups and authentication
 							# (e.g. "-nopreferred" or "-preferred ad.server.edu")
-admingroups=""				# These comma-separated AD groups may administer the machine (e.g. "" or "APPLE\mac admins")
+admingroups="g_helpdesk"				# These comma-separated AD groups may administer the machine (e.g. "" or "APPLE\mac admins")
 packetsign="allow"			# allow | disable | require
 packetencrypt="allow"			# allow | disable | require
-passinterval="14"			# number of days
+passinterval="90"			# number of days
 namespace="domain"			# forest | domain
 
 
@@ -89,10 +89,10 @@ echo ""         # force a carriage return to be output
 
 # Enter AD computer ID
 # If you need to enter a message for your support team with regards to your naming convention, here's a good place to do it.
-echo "For computer ID, set it as HG-NNNNNNN-XXX where NNNNNNN 
-is the inventory decal number and XXX is determined by the type of Mac and the 
+echo "For computer ID, set it as FTS-NNNN-XXX where NNNN is the inventory decal number 
+(not including the trailing FTS) and XXX is determined by the type of Mac and the 
 OS (see descriptions below.) For example, a Mac desktop running 10.4.x would be 
-HG-NNNNNNN-DM4, and a Mac laptop running 10.6.x would be HG-NNNNNNN-LM6. 
+FTS-NNNN-DM4, and a Mac laptop running 10.6.x would be FTS-NNNN-LM6. 
   
 Type  
 
@@ -132,13 +132,13 @@ defaults write /Library/Preferences/DirectoryService/DirectoryService "Active Di
 plutil -convert xml1 /Library/Preferences/DirectoryService/DirectoryService.plist
 
 # Binding to the correct Active Directory OU
-echo "Is the Mac a laptop?"
-select yn in "Yes" "No"; do
-    	case $yn in
-        	Yes) dsconfigad -f -a $computerid -domain $domain -u $udn -p "$password" -ou "$laptop_ou"; echo "Adding to OU=Macs,OU=Laptops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM."; break;;
-        	No ) dsconfigad -f -a $computerid -domain $domain -u $udn -p "$password" -ou "$desktop_ou"; echo "Adding to OU=Macs,OU=Desktops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM."; break;;
-    	esac
-done
+#echo "Is the Mac a laptop?"
+#select yn in "Yes" "No"; do
+#    	case $yn in
+#        	Yes) dsconfigad -f -a $computerid -domain $domain -u $udn -p "$password" -ou "$laptop_ou"; echo "Adding to OU=Macs,OU=Laptops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM."; break;;
+#        	No ) dsconfigad -f -a $computerid -domain $domain -u $udn -p "$password" -ou "$desktop_ou"; echo "Adding to OU=Macs,OU=Desktops,OU=Computers,OU=DIVISION,OU=COMPANY,OU=FOREST,DC=COMPANY,DC=COM."; break;;
+#    	esac
+#done
 
 # Configure advanced AD plugin options
 if [ "$admingroups" = "" ]; then
